@@ -27,5 +27,6 @@ tasks.withType<KotlinCompile> {
 }
 
 application {
-    mainClass.set("MainKt")
+    val main: String? by project
+    mainClass.set(main)
 }
