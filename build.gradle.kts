@@ -2,6 +2,7 @@ import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
     kotlin("jvm") version "1.5.10"
+    id("com.ncorti.ktfmt.gradle") version "0.7.0"
     application
 }
 
