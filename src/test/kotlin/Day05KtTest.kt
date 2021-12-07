@@ -27,6 +27,6 @@ internal class Day05KtTest {
 
   @Test
   fun `test part 2 sample input`() {
-    solvePart2(aocExampleInput) shouldBe 1924
+    solvePart2(aocExampleInput) shouldBe 12
   }
 }

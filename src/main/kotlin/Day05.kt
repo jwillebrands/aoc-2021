@@ -1,6 +1,8 @@
 package day5
 
 import java.io.File
+import kotlin.math.max
+import kotlin.math.min
 
 data class Point(val x: Int, val y: Int) {
   operator fun plus(vector: Vector2d): Point {
@@ -15,7 +17,11 @@ data class Point(val x: Int, val y: Int) {
   }
 }
 
-data class Vector2d(val x: Int, val y: Int)
+data class Vector2d(val x: Int, val y: Int) {
+  operator fun times(factor: Int): Vector2d {
+    return Vector2d(x * factor, y * factor)
+  }
+}
 
 data class LineSegment(val start: Point, val end: Point) {
   val isHorizontal
@@ -24,19 +30,15 @@ data class LineSegment(val start: Point, val end: Point) {
   val isVertical
     get() = start.x == end.x
 
+  val direction
+    get() = Vector2d(end.x.compareTo(start.x), end.y.compareTo(start.y))
+
+  private val directionMultiplier
+    get(): Int =
+        max(max(start.x, end.x) - min(start.x, end.x), max(start.y, end.y) - min(start.y, end.y))
+
   fun getDiscretePoints(): Iterable<Point> {
-    return when {
-      isHorizontal ->
-          IntProgression.fromClosedRange(start.x, end.x, end.x.compareTo(start.x)).map {
-            Point(it, start.y)
-          }
-      isVertical ->
-          IntProgression.fromClosedRange(start.y, end.y, end.y.compareTo(start.y)).map {
-            Point(start.x, it)
-          }
-      else ->
-          throw UnsupportedOperationException("Only horizontal and vertical segments are supported")
-    }
+    return (0..directionMultiplier).map { start + direction * it }
   }
 
   companion object {
@@ -57,10 +59,16 @@ fun solvePart1(lines: Sequence<String>): Int {
 }
 
 fun solvePart2(lines: Sequence<String>): Int {
-  return 0
+  return lines
+      .map { LineSegment.fromText(it) }
+      .flatMap { it.getDiscretePoints() }
+      .groupBy { it }
+      .count { it.value.size > 1 }
 }
 
 fun main() {
   val part1Result = File("src/main/resources/day05.txt").useLines { solvePart1(it) }
   val part2Result = File("src/main/resources/day05.txt").useLines { solvePart2(it) }
+  println("Part 1 ${part1Result}")
+  println("Part 2 ${part2Result}")
 }
