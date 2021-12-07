@@ -2,10 +2,10 @@ package day6
 
 import java.io.File
 
-fun solvePart1(fish: List<Int>): Int {
-  val fishByIncubationDays: IntArray = IntArray(9)
-  fish.forEach { fishByIncubationDays[it] += 1 }
-  for (i in 1..80) {
+fun growFish(fish: List<Int>, days: Int): Long {
+  val fishByIncubationDays: LongArray = LongArray(9)
+  fish.forEach { fishByIncubationDays[it] += 1L }
+  for (i in 1..days) {
     val newFish = fishByIncubationDays[0]
     fishByIncubationDays[7] += newFish
     for (day in 1..8) {
@@ -16,8 +16,12 @@ fun solvePart1(fish: List<Int>): Int {
   return fishByIncubationDays.sum()
 }
 
-fun solvePart2(fish: List<Int>): Int {
-  return 0
+fun solvePart1(fish: List<Int>): Long {
+  return growFish(fish, 80)
+}
+
+fun solvePart2(fish: List<Int>): Long {
+  return growFish(fish, 256)
 }
 
 fun main() {
